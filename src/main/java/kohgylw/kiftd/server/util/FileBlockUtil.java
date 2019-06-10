@@ -44,8 +44,9 @@ public class FileBlockUtil {
 	 */
 	public String saveToFileBlocks(final MultipartFile f) {
 		final String fileBlocks = ConfigureReader.instance().getFileBlockPath();
-		final String id = UUID.randomUUID().toString().replace("-", "");
-		final String path = "file_" + id + ".block";
+		//final String id = UUID.randomUUID().toString().replace("-", "");
+		//final String path = "file_" + id + ".block";
+		String path = builtPath(f.getOriginalFilename());
 		final File file = new File(fileBlocks, path);
 		try {
 			f.transferTo(file);
@@ -239,5 +240,15 @@ public class FileBlockUtil {
 				zs.add(new FileSource(thisPath + node.getFileName(), new File(fileBlocks, node.getFilePath())));
 			}
 		}
+
+
+	}
+	public static String builtPath(String name){
+		int index = name.lastIndexOf('.');
+		String id = UUID.randomUUID().toString().replace("-", "");
+		index = index != -1 ? index : name.length();
+		String prefix = name.substring(0,index);
+		String suffix = name.substring(index);
+		return prefix + "_" + id + suffix;
 	}
 }
